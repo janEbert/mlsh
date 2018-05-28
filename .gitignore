@@ -1,0 +1,4 @@
+*.pyc
+.idea/
+mlsh_code/MUJOCO_LOG.TXT
+venv/
