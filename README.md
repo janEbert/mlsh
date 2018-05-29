@@ -4,6 +4,8 @@ Fork of the [original](https://github.com/openai/mlsh) Meta-Learning Shared Hier
 
 Code for [Meta-Learning Shared Hierarchies](https://s3-us-west-2.amazonaws.com/openai-assets/MLSH/mlsh_paper.pdf).
 
+Includes pre-trained checkpoints for task AntBandits-v1 (up to 2000 epochs).
+
 ##### Installation
 
 Install [mujoco-py](https://github.com/openai/mujoco-py/) and MuJoCo by following the [installation instructions](https://github.com/openai/mujoco-py/#install-mujoco).
