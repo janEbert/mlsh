@@ -2,3 +2,4 @@
 .idea/
 mlsh_code/MUJOCO_LOG.TXT
 venv/
+mlsh_code/savedir
