@@ -48,10 +48,12 @@ mpirun -np 12 python main.py ...
 ###### Training
 
 ```
-python main.py --task AntBandits-v1 --num_subs 2 --macro_duration 1000 --num_rollouts 2000 --warmup_time 20 --train_time 30 --replay False AntAgent
+python main.py --task AntBandits-v1 --num_subs 2 --num_epochs 10000 --macro_duration 1000 --num_rollouts 2000 --warmup_time 20 --train_time 30 --replay False AntAgent
 
 ```
 Use `python3` if `python` links to an older version of Python (like in the university computers).
+
+Parameter `--save_every X` controls how often checkpoints are saved (every `X` epochs). Default is 500.
 
 ###### Visualization
 

@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('savename', type=str)
 parser.add_argument('--task', type=str)
 parser.add_argument('--num_subs', type=int)
+parser.add_argument('--num_epochs', type=int)
 parser.add_argument('--macro_duration', type=int)
 parser.add_argument('--num_rollouts', type=int)
 parser.add_argument('--warmup_time', type=int)
@@ -12,9 +13,10 @@ parser.add_argument('--force_subpolicy', type=int)
 parser.add_argument('--replay', type=str)
 parser.add_argument('-s', action='store_true')
 parser.add_argument('--continue_iter', type=str)
+parser.add_argument('--save_every', type=int)
 args = parser.parse_args()
 
-# python main.py --task MovementBandits-v0 --num_subs 2 --macro_duration 10 --num_rollouts 1000 --warmup_time 60 --train_time 1 --replay True test
+# python main.py --task MovementBandits-v0 --num_subs 2 --num_epochs 10000 --macro_duration 10 --num_rollouts 1000 --warmup_time 60 --train_time 1 --replay True test
 
 from mpi4py import MPI
 from rl_algs.common import set_global_seeds, tf_util as U
@@ -39,13 +41,17 @@ def str2bool(v):
 
 replay = str2bool(args.replay)
 args.replay = str2bool(args.replay)
+if args.save_every is None:
+    save_every = 500
+else:
+    save_every = args.save_every
 
 RELPATH = osp.join(args.savename)
 LOGDIR = osp.join('/root/results' if sys.platform.startswith('linux') else '/tmp', RELPATH)
 
-def callback(it):
+def callback(it, forced=False):
     if MPI.COMM_WORLD.Get_rank()==0:
-        if it % 5 == 0 and it > 3 and not replay:
+        if it % save_every == 0 and it > 3 and not replay or forced:
             fname = osp.join("savedir", args.savename, 'checkpoints', '%.5i'%it)
             U.save_state(fname)
     if it == 0 and args.continue_iter is not None:

@@ -19,6 +19,7 @@ def start(callback, args, workerseed, rank, comm):
     ac_space = env.action_space
 
     num_subs = args.num_subs
+    num_epochs = args.num_epochs
     macro_duration = args.macro_duration
     num_rollouts = args.num_rollouts
     warmup_time = args.warmup_time
@@ -41,7 +42,7 @@ def start(callback, args, workerseed, rank, comm):
     rollout = rollouts.traj_segment_generator(policy, sub_policies, env, macro_duration, num_rollouts, stochastic=True, args=args)
 
 
-    for x in range(10000):
+    for x in range(num_epochs):
         callback(x)
         if x == 0:
             learner.syncSubpolicies()
@@ -79,3 +80,4 @@ def start(callback, args, workerseed, rank, comm):
                 totalmeans.append(gmean)
                 with open('outfile'+str(x)+'.pickle', 'wb') as fp:
                     pickle.dump(totalmeans, fp)
+    callback(num_epochs, True)
