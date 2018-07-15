@@ -45,6 +45,10 @@ if args.save_every is None:
     save_every = 500
 else:
     save_every = args.save_every
+if args.continue_iter is None:
+    continue_iter = 0
+else:
+    continue_iter = args.continue_iter
 
 RELPATH = osp.join(args.savename)
 LOGDIR = osp.join('/root/results' if sys.platform.startswith('linux') else '/tmp', RELPATH)

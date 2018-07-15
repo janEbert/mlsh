@@ -41,9 +41,8 @@ def start(callback, args, workerseed, rank, comm):
     learner = Learner(env, policy, old_policy, sub_policies, old_sub_policies, comm, clip_param=0.2, entcoeff=0, optim_epochs=10, optim_stepsize=3e-5, optim_batchsize=64)
     rollout = rollouts.traj_segment_generator(policy, sub_policies, env, macro_duration, num_rollouts, stochastic=True, args=args)
 
-
     for x in range(num_epochs):
-        callback(x)
+        callback(continue_iter)
         if x == 0:
             learner.syncSubpolicies()
             print("synced subpols")
@@ -56,7 +55,9 @@ def start(callback, args, workerseed, rank, comm):
         shared_goal = comm.bcast(env.env.realgoal, root=0)
         env.env.realgoal = shared_goal
 
-        print("It is iteration %d so i'm changing the goal to %s" % (x, env.env.realgoal))
+        print("It is iteration %d so i'm changing the goal to %s"
+              % (continue_iter, env.env.realgoal))
+        continue_iter += 1
         mini_ep = 0 if x > 0 else -1 * (rank % 10)*int(warmup_time+train_time / 10)
         # mini_ep = 0
 
@@ -80,4 +81,4 @@ def start(callback, args, workerseed, rank, comm):
                 totalmeans.append(gmean)
                 with open('outfile'+str(x)+'.pickle', 'wb') as fp:
                     pickle.dump(totalmeans, fp)
-    callback(num_epochs, True)
+    callback(num_epochs + continue_iter, True)

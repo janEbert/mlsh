@@ -4,7 +4,7 @@ Fork of the [original](https://github.com/openai/mlsh) Meta-Learning Shared Hier
 
 Code for [Meta-Learning Shared Hierarchies](https://s3-us-west-2.amazonaws.com/openai-assets/MLSH/mlsh_paper.pdf).
 
-Includes pre-trained checkpoints for task AntBandits-v1 (up to 2000 epochs).
+Includes pre-trained checkpoints for task AntBandits-v1 (up to 2000 epochs) in mlsh_code/savedir/.
 
 ##### Installation
 
@@ -31,12 +31,17 @@ Use `pip3` if `pip` links to an older version of Python (like in the university 
 ###### Installing on the university computers
 
 If you are installing on the university computers, install mujoco-py version 0.5.7 with MuJoCo version 1.31 as newer versions will not work.
+You may also think about installing TensorFlow 1.5.0 to be sure that it will run on any university computer although this is not as important.
 Also remember to always use `python3` or `pip3` instead of `python` or `pip`.
 ```
-pip3 install mujoco-py==0.5.7
+pip3 install tensorflow==1.5.0 mujoco-py==0.5.7
 ```
 
 ##### Running Experiments
+
+```
+cd mlsh_code
+```
 
 The MLSH script works on any Gym environment that implements the `randomizeCorrect()` function. See the `envs/` folder for examples of such environments.
 
