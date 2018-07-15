@@ -42,7 +42,7 @@ def start(callback, args, workerseed, rank, comm):
     rollout = rollouts.traj_segment_generator(policy, sub_policies, env, macro_duration, num_rollouts, stochastic=True, args=args)
 
     for x in range(num_epochs):
-        callback(continue_iter)
+        callback(args.continue_iter)
         if x == 0:
             learner.syncSubpolicies()
             print("synced subpols")
@@ -56,8 +56,8 @@ def start(callback, args, workerseed, rank, comm):
         env.env.realgoal = shared_goal
 
         print("It is iteration %d so i'm changing the goal to %s"
-              % (continue_iter, env.env.realgoal))
-        continue_iter += 1
+              % (args.continue_iter, env.env.realgoal))
+        args.continue_iter += 1
         mini_ep = 0 if x > 0 else -1 * (rank % 10)*int(warmup_time+train_time / 10)
         # mini_ep = 0
 
@@ -81,4 +81,4 @@ def start(callback, args, workerseed, rank, comm):
                 totalmeans.append(gmean)
                 with open('outfile'+str(x)+'.pickle', 'wb') as fp:
                     pickle.dump(totalmeans, fp)
-    callback(num_epochs + continue_iter, True)
+    callback(args.continue_iter, True)

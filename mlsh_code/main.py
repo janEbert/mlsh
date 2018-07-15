@@ -46,9 +46,9 @@ if args.save_every is None:
 else:
     save_every = args.save_every
 if args.continue_iter is None:
-    continue_iter = 0
+    args.continue_iter = 0
 else:
-    continue_iter = args.continue_iter
+    args.continue_iter = args.continue_iter
 
 RELPATH = osp.join(args.savename)
 LOGDIR = osp.join('/root/results' if sys.platform.startswith('linux') else '/tmp', RELPATH)
@@ -58,7 +58,7 @@ def callback(it, forced=False):
         if it % save_every == 0 and it > 3 and not replay or forced:
             fname = osp.join("savedir", args.savename, 'checkpoints', '%.5i'%it)
             U.save_state(fname)
-    if it == 0 and args.continue_iter is not None:
+    if it == 0 and args.continue_iter != 0:
         fname = osp.join("savedir", args.savename, "checkpoints",
                 '%.5i' % int(args.continue_iter))
         U.load_state(fname)
